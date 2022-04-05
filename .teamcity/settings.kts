@@ -40,12 +40,12 @@ object Build : BuildType({
 
     steps {
         script {
-            name = "Cake"
-            scriptContent = "dotnet cake"
-        }
-        script {
             name = "dotnet tool restore"
             scriptContent = "dotnet tool restore"
+        }
+        script {
+            name = "Cake"
+            scriptContent = "dotnet cake"
         }
     }
 

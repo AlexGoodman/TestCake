@@ -10,7 +10,7 @@ var outputFolder = "./artifacts";
 var testResultFolder = "./test_result";
 
 DirectoryPath TestResultsDirectory = "./test_result";
-FilePath CodeCoverageReportFile = TestResultsDirectory + "/coverage.xml";
+FilePath CodeCoverageReportFile = TestResultsDirectory + "/coverage.dcvr";
 
 Task("Clean")
     .Does(() => {
@@ -102,7 +102,7 @@ Task("Test")
             );
         }
 
-        TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
+        // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
     });
 
 Task("Publish-TeamCity-Test-Results")

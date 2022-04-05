@@ -36,40 +36,40 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {    
-        // DotNetCoreTest(
-        //     solutionFolder, 
-        //     new DotNetCoreTestSettings {
-        //         NoRestore = true,
-        //         Configuration = configuration,
-        //         NoBuild = true,
-        //         Logger = "trx",
-        //         ResultsDirectory = testResultFolder
-        //     }, 
-        //     new CoverletSettings {
-        //         CollectCoverage = true,
-        //         CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
-        //         CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
-        //         CoverletOutputFormat = CoverletOutputFormat.teamcity
-        //         // CoverletOutputFormat = CoverletOutputFormat.opencover
-        //     }
-        // );
-
-        DotCoverCover(
-            t => {
-                t.NUnit3(
-                    $"**/bin/{configuration}/*Tests.dll",
-                    new NUnit3Settings
-                    {
-                        // Results = CodeCoverageReportFile,
-                        TeamCity = true,                        
-                    }
-                );
-            },
-            CodeCoverageReportFile,
-            new DotCoverCoverSettings()
-                .WithFilter("+:Api*")
-                .WithFilter("-:Tests")
+        DotNetCoreTest(
+            solutionFolder, 
+            new DotNetCoreTestSettings {
+                NoRestore = true,
+                Configuration = configuration,
+                NoBuild = true,
+                Logger = "trx",
+                ResultsDirectory = testResultFolder
+            }, 
+            new CoverletSettings {
+                CollectCoverage = true,
+                CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
+                CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
+                CoverletOutputFormat = CoverletOutputFormat.teamcity
+                // CoverletOutputFormat = CoverletOutputFormat.opencover
+            }
         );
+
+        // DotCoverCover(
+        //     t => {                
+        //         t.NUnit3(
+        //             $"**/bin/{configuration}/*Tests.dll",
+        //             new NUnit3Settings
+        //             {
+        //                 // Results = CodeCoverageReportFile,
+        //                 TeamCity = true,                        
+        //             }
+        //         );
+        //     },
+        //     CodeCoverageReportFile,
+        //     new DotCoverCoverSettings()
+        //         .WithFilter("+:Api*")
+        //         .WithFilter("-:Tests")
+        // );
         // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
     });
 

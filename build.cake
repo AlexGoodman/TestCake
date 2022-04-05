@@ -10,7 +10,7 @@ var outputFolder = "./artifacts";
 var testResultFolder = "./test_result";
 
 DirectoryPath TestResultsDirectory = "./test_result";
-FilePath CodeCoverageReportFile = TestResultsDirectory + "/coverage.dcvr";
+FilePath CodeCoverageReportFile = TestResultsDirectory + "/coverage.xml";
 
 Task("Clean")
     .Does(() => {
@@ -79,11 +79,11 @@ Task("Test")
                     t.DotNetCoreTest(
                         project.ToString(), 
                         new DotNetCoreTestSettings {
-                            NoRestore = true,
-                            Configuration = configuration,
-                            NoBuild = true,
-                            Logger = "trx",
-                            ResultsDirectory = testResultFolder
+                            // NoRestore = true,
+                            // Configuration = configuration,
+                            // NoBuild = true,
+                            // Logger = "trx",
+                            // ResultsDirectory = testResultFolder
                         }
                         // ,
                         // new CoverletSettings {

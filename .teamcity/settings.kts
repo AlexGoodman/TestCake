@@ -45,7 +45,7 @@ object Build : BuildType({
         }
         script {
             name = "Cake"
-            scriptContent = "dotnet cake"
+            scriptContent = "dotnet cake --verbosity Diagnostic"
         }
     }
 

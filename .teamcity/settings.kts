@@ -43,6 +43,10 @@ object Build : BuildType({
             name = "Cake"
             scriptContent = "dotnet cake"
         }
+        script {
+            name = "dotnet tool restore"
+            scriptContent = "dotnet tool restore"
+        }
     }
 
     triggers {

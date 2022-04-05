@@ -7,9 +7,9 @@ namespace Api.Controllers
     public class TestController : ControllerBase
     {        
         [HttpGet(Name = "test1")]
-        public async Task<IEnumerable<string>> Test1()
+        public async Task<int> Test1()
         {
-            return await Task.FromResult(new HashSet<string>{ "test" });
+            return await Task.FromResult(1);
         }
     }
 }

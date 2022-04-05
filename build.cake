@@ -47,7 +47,7 @@ Task("Test")
                 CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
                 CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
                 CoverletOutputFormat = CoverletOutputFormat.teamcity
-            }.WithFilter("[Tests]*")
+            }
         );
         Information(CodeCoverageReportFile.GetDirectory());
         Information(CodeCoverageReportFile.GetFilename().ToString());

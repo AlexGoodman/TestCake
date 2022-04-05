@@ -1,3 +1,4 @@
+using Api.Controllers;
 using NUnit.Framework;
 
 namespace Tests
@@ -10,9 +11,10 @@ namespace Tests
         }
 
         [Test]
-        public void Test1()
+        public async void Test1()
         {
-            Assert.Pass();
+            var controller = new TestController();
+            Assert.AreEqual(await controller.Test1(), 1);
         }
 
         [Test]

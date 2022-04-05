@@ -1,4 +1,4 @@
-﻿var target = Argument("target", "Publish");
+﻿var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");
 var solutionFolder = "./";
 var outputFolder = "./artifacts";
@@ -43,5 +43,12 @@ Task("Publish")
             OutputDirectory = outputFolder
         });
     });
+
+Task("Publish-TeamCity-Artifacts")
+    .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
+    .IsDependentOn("Publish")
+    .Does<PackageMetadata>(package => {
+        TeamCity.PublishArtifacts(package.OutputDirectory.FullPath);
+    });    
 
 RunTarget(target);

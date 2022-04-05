@@ -67,7 +67,7 @@ Task("Test")
         //         // .WithFilter("+:Api*")
         //         // .WithFilter("-:Tests")
         // );
-        TeamCity.ImportDotCoverCoverage(CodeCoverageReportFile);    
+        TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
     });
 
 Task("Publish-TeamCity-Test-Results")

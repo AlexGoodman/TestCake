@@ -1,5 +1,6 @@
 using Api.Controllers;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Tests
 {
@@ -11,7 +12,7 @@ namespace Tests
         }
 
         [Test]
-        public async void Test1()
+        public async Task Test1()
         {
             var controller = new TestController();
             Assert.AreEqual(await controller.Test1(), 1);

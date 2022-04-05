@@ -5,7 +5,9 @@ var configuration = Argument("configuration", "Release");
 var solutionFolder = "./";
 var outputFolder = "./artifacts";
 var testResultFolder = "./test_result";
-var testCoverageFile = "coverage.xml";;
+
+DirectoryPath TestResultsDirectory = "./test_result";
+FilePath CodeCoverageReportFile = TestResultsDirectory + "/coverage.xml";
 
 Task("Clean")
     .Does(() => {
@@ -42,11 +44,13 @@ Task("Test")
             }, 
             new CoverletSettings {
                 CollectCoverage = true,
-                CoverletOutputDirectory = testResultFolder,
-                CoverletOutputName = testCoverageFile,
+                CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
+                CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
                 CoverletOutputFormat = CoverletOutputFormat.teamcity
-            }
+            }.WithFilter("[Tests]*")
         );
+        Information(CodeCoverageReportFile.GetDirectory());
+        Information(CodeCoverageReportFile.GetFilename().ToString());
     });
 
 Task("Publish-TeamCity-Test-Results")

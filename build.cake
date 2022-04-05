@@ -5,7 +5,7 @@ var configuration = Argument("configuration", "Release");
 var solutionFolder = "./";
 var outputFolder = "./artifacts";
 var testResultFolder = "./test_result";
-var testCoverageFile = testResultFolder + "/coverage.xml";;
+var testCoverageFile = "coverage.xml";;
 
 Task("Clean")
     .Does(() => {
@@ -30,22 +30,23 @@ Task("Build")
 
 Task("Test")
     .IsDependentOn("Build")
-    .Does(() => {
-        var coverageSettings = new CoverletSettings
-        {
-            CollectCoverage = true,
-            CoverletOutputDirectory = testCoverageFile.GetDirectory(),
-            CoverletOutputName = testCoverageFile.GetFilename().ToString(),
-            CoverletOutputFormat = CoverletOutputFormat.teamcity
-        };
-
-        DotNetTest(solutionFolder, new DotNetTestSettings {
-            NoRestore = true,
-            Configuration = configuration,
-            NoBuild = true,
-            Logger = "trx",
-            ResultsDirectory = testResultFolder
-        }, coverageSettings);
+    .Does(() => {    
+        DotNetCoreTest(
+            solutionFolder, 
+            new DotNetCoreTestSettings {
+                NoRestore = true,
+                Configuration = configuration,
+                NoBuild = true,
+                Logger = "trx",
+                ResultsDirectory = testResultFolder
+            }, 
+            new CoverletSettings {
+                CollectCoverage = true,
+                CoverletOutputDirectory = testResultFolder,
+                CoverletOutputName = testCoverageFile,
+                CoverletOutputFormat = CoverletOutputFormat.teamcity
+            }
+        );
     });
 
 Task("Publish-TeamCity-Test-Results")

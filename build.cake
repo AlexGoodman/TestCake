@@ -1,4 +1,6 @@
-﻿var target = Argument("target", "Publish-TeamCity-Artifacts");
+﻿#addin nuget:?package=Cake.Coverlet
+
+var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");
 var solutionFolder = "./";
 var outputFolder = "./artifacts";

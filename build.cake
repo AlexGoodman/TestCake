@@ -50,8 +50,24 @@ Task("Test")
                 // CoverletOutputFormat = CoverletOutputFormat.opencover
             }
         );
-        Information(CodeCoverageReportFile.GetDirectory());
-        Information(CodeCoverageReportFile.GetFilename().ToString());
+
+        // DotCoverCover(
+        //     (ICakeContext c) => {
+        //         c.NUnit3(
+        //             $"**/bin/{configuration}/*Tests.dll",
+        //             new NUnit3Settings
+        //             {
+        //                 // Results = CodeCoverageReportFile.GetFilename().ToString(),
+        //                 TeamCity = true
+        //             }
+        //         );
+        //     },
+        //     CodeCoverageReportFile.GetFilename().ToString(),
+        //     new DotCoverCoverSettings()
+        //         // .WithFilter("+:Api*")
+        //         // .WithFilter("-:Tests")
+        // );
+        TeamCity.ImportDotCoverCoverage(CodeCoverageReportFile);    
     });
 
 Task("Publish-TeamCity-Test-Results")

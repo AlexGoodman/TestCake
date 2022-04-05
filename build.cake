@@ -2,10 +2,12 @@
 var configuration = Argument("configuration", "Release");
 var solutionFolder = "./";
 var outputFolder = "./artifacts";
+var testResultFolder = "./test_result";
 
 Task("Clean")
     .Does(() => {
         CleanDirectory(outputFolder);
+        CleanDirectory(testResultFolder);
     });
 
 Task("Restore")
@@ -29,7 +31,9 @@ Task("Test")
         DotNetTest(solutionFolder, new DotNetTestSettings {
             NoRestore = true,
             Configuration = configuration,
-            NoBuild = true
+            NoBuild = true,
+            Logger = "trx",
+            ResultsDirectory = testResultFolder
         });
     });
 

@@ -1,33 +1,47 @@
-﻿///////////////////////////////////////////////////////////////////////////////
-// ARGUMENTS
-///////////////////////////////////////////////////////////////////////////////
-
-var target = Argument("target", "Default");
+﻿var target = Argument("target", "Publish");
 var configuration = Argument("configuration", "Release");
+var solutionFolder = "./";
+var outputFolder = "./artifacts";
 
-///////////////////////////////////////////////////////////////////////////////
-// SETUP / TEARDOWN
-///////////////////////////////////////////////////////////////////////////////
+Task("Clean")
+    .Does(() => {
+        CleanDirectory(outputFolder);
+    });
 
-Setup(ctx =>
-{
-	// Executed BEFORE the first task.
-	Information("Running tasks...");
-});
+Task("Restore")
+    .Does(() => {
+        DotNetRestore(solutionFolder);
+    });
 
-Teardown(ctx =>
-{
-	// Executed AFTER the last task.
-	Information("Finished running tasks.");
-});
+Task("Build")
+    .IsDependentOn("Restore")
+    .IsDependentOn("Clean")
+    .Does(() => {
+        DotNetBuild(solutionFolder, new DotNetBuildSettings {
+            NoRestore = true,
+            Configuration = configuration
+        });
+    });
 
-///////////////////////////////////////////////////////////////////////////////
-// TASKS
-///////////////////////////////////////////////////////////////////////////////
+Task("Test")
+    .IsDependentOn("Build")
+    .Does(() => {
+        DotNetTest(solutionFolder, new DotNetTestSettings {
+            NoRestore = true,
+            Configuration = configuration,
+            NoBuild = true
+        });
+    });
 
-Task("Default")
-.Does(() => {
-	Information("Hello Cake!");
-});
+Task("Publish")
+    .IsDependentOn("Test")
+    .Does(() => {
+        DotNetPublish(solutionFolder, new DotNetPublishSettings {
+            NoRestore = true,
+            Configuration = configuration,
+            NoBuild = true,
+            OutputDirectory = outputFolder
+        });
+    });
 
 RunTarget(target);

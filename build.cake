@@ -85,14 +85,14 @@ Task("Test")
                             Logger = "trx",
                             ResultsDirectory = testResultFolder
                         }
-                        ,
-                        new CoverletSettings {
-                            CollectCoverage = true,
-                            CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
-                            CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
-                            CoverletOutputFormat = CoverletOutputFormat.teamcity
-                            // CoverletOutputFormat = CoverletOutputFormat.opencover
-                        }                    
+                        // ,
+                        // new CoverletSettings {
+                        //     CollectCoverage = true,
+                        //     CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
+                        //     CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
+                        //     CoverletOutputFormat = CoverletOutputFormat.teamcity
+                        //     // CoverletOutputFormat = CoverletOutputFormat.opencover
+                        // }                    
                     );
                 },
                 CodeCoverageReportFile,

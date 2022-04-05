@@ -46,8 +46,8 @@ Task("Test")
                 CollectCoverage = true,
                 CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
                 CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
-                // CoverletOutputFormat = CoverletOutputFormat.teamcity
-                CoverletOutputFormat = CoverletOutputFormat.opencover
+                CoverletOutputFormat = CoverletOutputFormat.teamcity
+                // CoverletOutputFormat = CoverletOutputFormat.opencover
             }
         );
         Information(CodeCoverageReportFile.GetDirectory());

@@ -47,8 +47,8 @@ Task("Publish")
 Task("Publish-TeamCity-Artifacts")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
     .IsDependentOn("Publish")
-    .Does<PackageMetadata>(package => {
-        TeamCity.PublishArtifacts(package.OutputDirectory.FullPath);
+    .Does(() => {
+        TeamCity.PublishArtifacts(outputFolder);
     });    
 
 RunTarget(target);

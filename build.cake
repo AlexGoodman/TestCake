@@ -105,14 +105,14 @@ Task("Test")
         var projects = GetFiles("**/Tests.csproj");
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
         var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
-        var testSettings = new DotNetCoreTestSettings() {
-            // Configuration = "Release",
-            // NoBuild = true,
-            NoRestore = true,
-            Configuration = configuration,
+        var testSettings = new DotNetTestSettings() {
+            Configuration = "Release",
             NoBuild = true,
-            Loggers = new HashSet<string>{"trx"},
-            ResultsDirectory = testResultFolder
+            // NoRestore = true,
+            // Configuration = configuration,
+            // NoBuild = true,
+            // Loggers = new HashSet<string>{"trx"},
+            // ResultsDirectory = testResultFolder
         };
         var coverageSettings = new DotCoverCoverSettings();
             // .WithFilter("+:module=SimCorp.Tools.SyncService*")
@@ -125,7 +125,7 @@ Task("Test")
         foreach(var project in projects) {
             Information("Test - 1");
             DotCoverCover(testRunner => 
-                testRunner.DotNetCoreTest(project.FullPath, testSettings),
+                testRunner.DotNetTest(project.FullPath, testSettings),
                 coverageResultsFile,
                 coverageSettings
             );

@@ -1,5 +1,5 @@
 ﻿#tool nuget:?package=NUnit.ConsoleRunner
-#tool nuget:?package=JetBrains.dotCover.CommandLineTools
+#tool nuget:?package=JetBrains.dotCover.CommandLineTools.linux-x64
 
 #addin nuget:?package=Cake.Coverlet
 

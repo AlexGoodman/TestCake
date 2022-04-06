@@ -2,6 +2,7 @@
 #tool nuget:?package=JetBrains.dotCover.CommandLineTools
 
 #addin nuget:?package=Cake.Coverlet
+#addin nuget:?package=Cake.MonoApiTools
 
 var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");

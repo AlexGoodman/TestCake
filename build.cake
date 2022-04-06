@@ -106,7 +106,7 @@ Task("Test")
 
 
         var outputDirectory = MakeAbsolute(Directory("./test_result"));        
-        var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
+        var testCoverageResultsDirectory = $"{outputDirectory}";
 
         EnsureDirectoryExists(testCoverageResultsDirectory);
         var projects = GetFiles("**/Tests.csproj");

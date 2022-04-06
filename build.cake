@@ -71,30 +71,55 @@ Task("Test")
         //         .WithFilter("-:Tests")
         // );
 
-        var projects = GetFiles("**/Tests.csproj");
+        // var projects = GetFiles("**/Tests.csproj");
 
-        foreach(var project in projects){
-            DotCoverCover(
-                t => {                
-                    t.DotNetTest(
-                        project.ToString(), 
-                        new DotNetTestSettings {
-                            NoRestore = true,
-                            Configuration = configuration,
-                            NoBuild = true,
-                            Loggers = new HashSet<string>{"trx"},
-                            ResultsDirectory = testResultFolder
-                        }                                        
-                    );
-                },
-                CodeCoverageReportFile,
-                new DotCoverCoverSettings()
-                    .WithFilter("+:Api*")
-                    .WithFilter("-:Tests")
-            );
-        }
+        // foreach(var project in projects){
+        //     DotCoverCover(
+        //         t => {                
+        //             t.DotNetTest(
+        //                 project.ToString(), 
+        //                 new DotNetTestSettings {
+        //                     NoRestore = true,
+        //                     Configuration = configuration,
+        //                     NoBuild = true,
+        //                     Loggers = new HashSet<string>{"trx"},
+        //                     ResultsDirectory = testResultFolder
+        //                 }                                        
+        //             );
+        //         },
+        //         CodeCoverageReportFile,
+        //         new DotCoverCoverSettings()
+        //             .WithFilter("+:Api*")
+        //             .WithFilter("-:Tests")
+        //     );
+        // }
 
         // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
+
+        EnsureDirectoryExists(testResultFolder);
+        var projects = GetFiles("**/Tests.csproj");
+        var coverageResultsFile = new FilePath($"{testResultFolder}/Results.dcvr");
+        var coverageReportFile = new FilePath($"{testResultFolder}/DotCover.html");
+        var testSettings = new DotNetCoreTestSettings() {
+            Configuration = "Release",
+            NoBuild = true
+        };
+        var coverageSettings = new DotCoverCoverSettings();
+            // .WithFilter("+:module=SimCorp.Tools.SyncService*")
+            // .WithFilter("-:module=*.Test*");
+        
+        var coverageReportSettings = new DotCoverReportSettings {
+            ReportType = DotCoverReportType.HTML
+        };
+        
+        foreach(var project in projects) {
+            DotCoverCover(testRunner => 
+                testRunner.DotNetCoreTest(project.FullPath, testSettings),
+                coverageResultsFile,
+                coverageSettings
+            );
+        }
+        DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
     });
 
 Task("Publish-TeamCity-Test-Results")

@@ -111,7 +111,7 @@ Task("Test")
         EnsureDirectoryExists(testCoverageResultsDirectory);
         var projects = GetFiles("**/Tests.csproj");
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
-        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
+        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.xml");
         var testSettings = new DotNetCoreTestSettings() {
             // Configuration = "Release",
             // NoBuild = true,
@@ -126,7 +126,7 @@ Task("Test")
             // .WithFilter("-:*Tests*");
         
         var coverageReportSettings = new DotCoverReportSettings {
-            ReportType = DotCoverReportType.HTML
+            ReportType = DotCoverReportType.XML
         };
         
         foreach(var project in projects) {

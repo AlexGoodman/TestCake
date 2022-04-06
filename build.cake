@@ -1,6 +1,7 @@
-﻿#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.3.1"
-#tool "nuget:?package=GitVersion.CommandLine&version=5.0.1"
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.8.0"
+﻿#tool nuget:?package=NUnit.ConsoleRunner
+#tool nuget:?package=JetBrains.dotCover.CommandLineTools
+
+#addin nuget:?package=Cake.Coverlet
 
 var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");
@@ -105,8 +106,13 @@ Task("Test")
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
         var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
         var testSettings = new DotNetCoreTestSettings() {
-            Configuration = "Release",
-            NoBuild = true
+            // Configuration = "Release",
+            // NoBuild = true,
+            NoRestore = true,
+            Configuration = configuration,
+            NoBuild = true,
+            Loggers = new HashSet<string>{"trx"},
+            ResultsDirectory = testResultFolder
         };
         var coverageSettings = new DotCoverCoverSettings();
             // .WithFilter("+:module=SimCorp.Tools.SyncService*")

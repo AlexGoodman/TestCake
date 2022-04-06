@@ -76,14 +76,21 @@ Task("Test")
         foreach(var project in projects){
             DotCoverCover(
                 t => {                
-                    t.DotNetTest(
+                    t.DotNetCoreTest(
                         project.ToString(), 
-                        new DotNetTestSettings {
+                        new DotNetCoreTestSettings {
                             NoRestore = true,
                             Configuration = configuration,
                             NoBuild = true,
                             Loggers = new HashSet<string>{"trx"},
                             ResultsDirectory = testResultFolder
+                        },
+                        new CoverletSettings {
+                            CollectCoverage = true,
+                            CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
+                            CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
+                            CoverletOutputFormat = CoverletOutputFormat.teamcity
+                            // CoverletOutputFormat = CoverletOutputFormat.opencover
                         }                                        
                     );
                 },

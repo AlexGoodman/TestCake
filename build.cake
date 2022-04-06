@@ -1,7 +1,6 @@
-﻿#tool nuget:?package=NUnit.ConsoleRunner
-#tool nuget:?package=JetBrains.dotCover.CommandLineTools
-
-#addin nuget:?package=Cake.Coverlet
+﻿#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.3.1"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.0.1"
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.8.0"
 
 var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");

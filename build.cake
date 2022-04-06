@@ -2,7 +2,6 @@
 #tool nuget:?package=JetBrains.dotCover.CommandLineTools
 
 #addin nuget:?package=Cake.Coverlet
-#addin nuget:?package=Cake.MonoApiTools
 
 var target = Argument("target", "Publish-TeamCity-Artifacts");
 var configuration = Argument("configuration", "Release");
@@ -126,13 +125,14 @@ Task("Test")
         foreach(var project in projects) {
             Information("Test - 1");
             DotCoverCover(testRunner => 
-                testRunner.DotNetCoreTest(project.FullPath, testSettings),
+                testRunner.DotNetCoreTest(project.FullPath, testSettings),                
                 coverageResultsFile,
                 coverageSettings
             );
         }
         Information("Test - 2");
-        DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
+        TeamCity.ImportDotCoverCoverage(MakeAbsolute(coverageResultsFile));    
+        // DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
     });
 
 Task("Publish-TeamCity-Test-Results")

@@ -96,10 +96,15 @@ Task("Test")
 
         // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
 
-        EnsureDirectoryExists(testResultFolder);
+
+
+        var outputDirectory = MakeAbsolute(Directory("./test_result"));        
+        var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
+
+        EnsureDirectoryExists(testCoverageResultsDirectory);
         var projects = GetFiles("**/Tests.csproj");
-        var coverageResultsFile = new FilePath($"{testResultFolder}/Results.dcvr");
-        var coverageReportFile = new FilePath($"{testResultFolder}/DotCover.html");
+        var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
+        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
         var testSettings = new DotNetCoreTestSettings() {
             Configuration = "Release",
             NoBuild = true
@@ -113,12 +118,14 @@ Task("Test")
         };
         
         foreach(var project in projects) {
+            Information("Test - 1");
             DotCoverCover(testRunner => 
                 testRunner.DotNetCoreTest(project.FullPath, testSettings),
                 coverageResultsFile,
                 coverageSettings
             );
         }
+        Information("Test - 2");
         DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
     });
 

@@ -71,67 +71,67 @@ Task("Test")
         //         .WithFilter("-:Tests")
         // );
 
-        // var projects = GetFiles("**/Tests.csproj");
-
-        // foreach(var project in projects){
-        //     DotCoverCover(
-        //         t => {                
-        //             t.DotNetTest(
-        //                 project.ToString(), 
-        //                 new DotNetTestSettings {
-        //                     NoRestore = true,
-        //                     Configuration = configuration,
-        //                     NoBuild = true,
-        //                     Loggers = new HashSet<string>{"trx"},
-        //                     ResultsDirectory = testResultFolder
-        //                 }                                        
-        //             );
-        //         },
-        //         CodeCoverageReportFile,
-        //         new DotCoverCoverSettings()
-        //             .WithFilter("+:Api*")
-        //             .WithFilter("-:Tests")
-        //     );
-        // }
-
-        // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
-
-
-
-        var outputDirectory = MakeAbsolute(Directory("./test_result"));        
-        var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
-
-        EnsureDirectoryExists(testCoverageResultsDirectory);
         var projects = GetFiles("**/Tests.csproj");
-        var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
-        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
-        var testSettings = new DotNetCoreTestSettings() {
-            Configuration = "Release",
-            NoBuild = true,
-            // NoRestore = true,
-            // Configuration = configuration,
-            // NoBuild = true,
-            // Loggers = new HashSet<string>{"trx"},
-            // ResultsDirectory = testResultFolder
-        };
-        var coverageSettings = new DotCoverCoverSettings()
-            .WithFilter("+:*Api*")
-            .WithFilter("-:*Tests*");
-        
-        var coverageReportSettings = new DotCoverReportSettings {
-            ReportType = DotCoverReportType.HTML
-        };
-        
-        foreach(var project in projects) {
-            Information("Test - 1");
-            DotCoverCover(testRunner => 
-                testRunner.DotNetCoreTest(project.FullPath, testSettings),                
-                coverageResultsFile,
-                coverageSettings
+
+        foreach(var project in projects){
+            DotCoverCover(
+                t => {                
+                    t.DotNetTest(
+                        project.ToString(), 
+                        new DotNetTestSettings {
+                            NoRestore = true,
+                            Configuration = configuration,
+                            NoBuild = true,
+                            Loggers = new HashSet<string>{"trx"},
+                            ResultsDirectory = testResultFolder
+                        }                                        
+                    );
+                },
+                CodeCoverageReportFile,
+                new DotCoverCoverSettings()
+                    .WithFilter("+:Api*")
+                    .WithFilter("-:Tests*")
             );
         }
-        Information("Test - 2");
-        TeamCity.ImportDotCoverCoverage(MakeAbsolute(coverageResultsFile));    
+
+        TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
+
+
+
+        // var outputDirectory = MakeAbsolute(Directory("./test_result"));        
+        // var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
+
+        // EnsureDirectoryExists(testCoverageResultsDirectory);
+        // var projects = GetFiles("**/Tests.csproj");
+        // var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
+        // var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
+        // var testSettings = new DotNetCoreTestSettings() {
+        //     Configuration = "Release",
+        //     NoBuild = true,
+        //     // NoRestore = true,
+        //     // Configuration = configuration,
+        //     // NoBuild = true,
+        //     // Loggers = new HashSet<string>{"trx"},
+        //     // ResultsDirectory = testResultFolder
+        // };
+        // var coverageSettings = new DotCoverCoverSettings()
+        //     .WithFilter("+:*Api*")
+        //     .WithFilter("-:*Tests*");
+        
+        // var coverageReportSettings = new DotCoverReportSettings {
+        //     ReportType = DotCoverReportType.HTML
+        // };
+        
+        // foreach(var project in projects) {
+        //     Information("Test - 1");
+        //     DotCoverCover(testRunner => 
+        //         testRunner.DotNetCoreTest(project.FullPath, testSettings),                
+        //         coverageResultsFile,
+        //         coverageSettings
+        //     );
+        // }
+        // Information("Test - 2");
+        // TeamCity.ImportDotCoverCoverage(MakeAbsolute(coverageResultsFile));    
         // DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
     });
 

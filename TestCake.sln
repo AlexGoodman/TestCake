@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.config\dotnet-tools.json = .config\dotnet-tools.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTests", "XTests\XTests.csproj", "{DDCB85AC-AD97-4CB8-9E24-6511545C28C6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{2777DB36-C9E5-4158-9436-1B912DEC7E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2777DB36-C9E5-4158-9436-1B912DEC7E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2777DB36-C9E5-4158-9436-1B912DEC7E6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDCB85AC-AD97-4CB8-9E24-6511545C28C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDCB85AC-AD97-4CB8-9E24-6511545C28C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDCB85AC-AD97-4CB8-9E24-6511545C28C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDCB85AC-AD97-4CB8-9E24-6511545C28C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

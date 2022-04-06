@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-cake"
       ]
+    },
+    "jetbrains.dotcover.globaltool": {
+      "version": "2021.3.4",
+      "commands": [
+        "dotnet-dotcover"
+      ]
     }
   }
 }

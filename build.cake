@@ -102,7 +102,7 @@ Task("Test")
         var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
 
         EnsureDirectoryExists(testCoverageResultsDirectory);
-        var projects = GetFiles("**/Tests.csproj");
+        var projects = GetFiles("**/XTests.csproj");
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
         var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
         var testSettings = new DotNetCoreTestSettings() {

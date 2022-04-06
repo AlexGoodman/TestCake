@@ -1,5 +1,5 @@
 ﻿#tool nuget:?package=NUnit.ConsoleRunner
-#tool nuget:?package=JetBrains.dotCover.CommandLineTools.linux-x64
+#tool nuget:?package=JetBrains.dotCover.CommandLineTools
 
 #addin nuget:?package=Cake.Coverlet
 
@@ -102,7 +102,7 @@ Task("Test")
         var testCoverageResultsDirectory = $"{outputDirectory}/TestCoverage";
 
         EnsureDirectoryExists(testCoverageResultsDirectory);
-        var projects = GetFiles("**/XTests.csproj");
+        var projects = GetFiles("**/Tests.csproj");
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
         var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");
         var testSettings = new DotNetCoreTestSettings() {

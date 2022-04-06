@@ -141,7 +141,7 @@ Task("Test")
         // DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
         TeamCity.ImportDotCoverCoverage(
             MakeAbsolute(coverageResultsFile),
-            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools")
+            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
         );            
     });
 

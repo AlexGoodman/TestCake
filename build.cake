@@ -36,23 +36,23 @@ Task("Build")
 Task("Test")
     .IsDependentOn("Build")
     .Does(() => {    
-        DotNetCoreTest(
-            solutionFolder, 
-            new DotNetCoreTestSettings {
-                NoRestore = true,
-                Configuration = configuration,
-                NoBuild = true,
-                Logger = "trx",
-                ResultsDirectory = testResultFolder
-            }, 
-            new CoverletSettings {
-                CollectCoverage = true,
-                CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
-                CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
-                CoverletOutputFormat = CoverletOutputFormat.teamcity
-                // CoverletOutputFormat = CoverletOutputFormat.opencover
-            }
-        );
+        // DotNetCoreTest(
+        //     solutionFolder, 
+        //     new DotNetCoreTestSettings {
+        //         NoRestore = true,
+        //         Configuration = configuration,
+        //         NoBuild = true,
+        //         Logger = "trx",
+        //         ResultsDirectory = testResultFolder
+        //     }, 
+        //     new CoverletSettings {
+        //         CollectCoverage = true,
+        //         CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
+        //         CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
+        //         CoverletOutputFormat = CoverletOutputFormat.teamcity
+        //         // CoverletOutputFormat = CoverletOutputFormat.opencover
+        //     }
+        // );
 
         // DotCoverCover(
         //     t => {                
@@ -71,36 +71,28 @@ Task("Test")
         //         .WithFilter("-:Tests")
         // );
 
-        // var projects = GetFiles("**/Tests.csproj");
+        var projects = GetFiles("**/Tests.csproj");
 
-        // foreach(var project in projects){
-        //     DotCoverCover(
-        //         t => {                
-        //             t.DotNetCoreTest(
-        //                 project.ToString(), 
-        //                 new DotNetCoreTestSettings {
-        //                     // NoRestore = true,
-        //                     // Configuration = configuration,
-        //                     // NoBuild = true,
-        //                     // Logger = "trx",
-        //                     // ResultsDirectory = testResultFolder
-        //                 }
-        //                 // ,
-        //                 // new CoverletSettings {
-        //                 //     CollectCoverage = true,
-        //                 //     CoverletOutputDirectory = CodeCoverageReportFile.GetDirectory(),
-        //                 //     CoverletOutputName = CodeCoverageReportFile.GetFilename().ToString(),
-        //                 //     CoverletOutputFormat = CoverletOutputFormat.teamcity
-        //                 //     // CoverletOutputFormat = CoverletOutputFormat.opencover
-        //                 // }                    
-        //             );
-        //         },
-        //         CodeCoverageReportFile,
-        //         new DotCoverCoverSettings()
-        //             .WithFilter("+:Api*")
-        //             .WithFilter("-:Tests")
-        //     );
-        // }
+        foreach(var project in projects){
+            DotCoverCover(
+                t => {                
+                    t.DotNetTest(
+                        project.ToString(), 
+                        new DotNetTestSettings {
+                            NoRestore = true,
+                            Configuration = configuration,
+                            NoBuild = true,
+                            Loggers = new HashSet<string>{"trx"},
+                            ResultsDirectory = testResultFolder
+                        }                                        
+                    );
+                },
+                CodeCoverageReportFile,
+                new DotCoverCoverSettings()
+                    .WithFilter("+:Api*")
+                    .WithFilter("-:Tests")
+            );
+        }
 
         // TeamCity.ImportDotCoverCoverage(MakeAbsolute(CodeCoverageReportFile));    
     });

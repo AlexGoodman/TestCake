@@ -137,12 +137,13 @@ Task("Test")
                 coverageSettings
             );
         }
-        Information("Test - 2");
+        // Information("Test - 2");
         // DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
-        TeamCity.ImportDotCoverCoverage(
-            MakeAbsolute(coverageResultsFile),
-            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
-        );            
+        // TeamCity.ImportData("nunit", parameters.Paths.TestResult);
+        // TeamCity.ImportDotCoverCoverage(
+        //     MakeAbsolute(coverageResultsFile),
+        //     MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
+        // );            
     });
 
 Task("Publish-TeamCity-Test-Results")

@@ -47,6 +47,10 @@ object Build : BuildType({
             name = "Cake"
             scriptContent = "dotnet cake --verbosity Diagnostic"
         }
+        script {
+            name = "Process Code Coverage"
+            scriptContent = "echo ##teamcity[dotNetCoverage dotcover_home='%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%']"
+        }
     }
 
     triggers {

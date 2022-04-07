@@ -47,6 +47,13 @@ object Build : BuildType({
             name = "Cake"
             scriptContent = "dotnet cake --verbosity Diagnostic"
         }
+        script {
+            name = "Process Code Coverage"
+            scriptContent = """
+                echo ##teamcity[dotNetCoverage ]
+                echo ##teamcity[importData type='dotNetCoverage' tool='dotcover' path='C:/TeamCity/buildAgent/work/6aa697e0d2d86fbb/test_result/TestCoverage/Results.dcvr']
+            """.trimIndent()
+        }
     }
 
     triggers {

@@ -144,7 +144,8 @@ Task("Test")
         var testResultFiles = GetFiles("**/test_result/*.trx");
         foreach(var testResultFile in testResultFiles) {
             Information(testResultFile.ToString());
-            TeamCity.ImportData("nunit", testResultFile);            
+            TeamCity.ImportData("vstest", testResultFile);            
+            // TeamCity.ImportData("nunit", testResultFile);            
         }
         
         TeamCity.ImportDotCoverCoverage(

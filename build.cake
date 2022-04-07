@@ -75,7 +75,10 @@ Task("Publish-TeamCity-Test-Coverage")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
     .IsDependentOn("Test")
     .Does(() => {
-        TeamCity.ImportDotCoverCoverage(MakeAbsolute(coverageResultsFile));     
+        TeamCity.ImportDotCoverCoverage(
+            MakeAbsolute(coverageResultsFile),
+            "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%"
+        );     
     }); 
 
 Task("Publish") 

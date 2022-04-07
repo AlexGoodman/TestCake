@@ -78,7 +78,7 @@ Task("Publish-TeamCity-Test-Coverage")
         TeamCity.ImportDotCoverCoverage(
             MakeAbsolute(coverageResultsFile),
             // MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools.2021.3.4/tools"))
-            Directory("C\\TeamCity\\buildAgent\\tools\\JetBrains.dotCover.CommandLineTools.bundled")
+            Directory("C:\\TeamCity\\buildAgent\\tools\\JetBrains.dotCover.CommandLineTools.bundled")
         );     
     }); 
 

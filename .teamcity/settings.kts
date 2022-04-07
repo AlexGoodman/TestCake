@@ -49,10 +49,7 @@ object Build : BuildType({
         }
         script {
             name = "Process Code Coverage"
-            scriptContent = """
-                echo ##teamcity[dotNetCoverage dotcover_home='%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%']
-                echo ##teamcity[importData type='dotNetCoverage' tool='dotcover' path='C:/TeamCity/buildAgent/work/6aa697e0d2d86fbb/test_result/TestCoverage/Results.dcvr']
-            """.trimIndent()
+            scriptContent = "echo ##teamcity[dotNetCoverage dotcover_home='%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%']"
         }
     }
 

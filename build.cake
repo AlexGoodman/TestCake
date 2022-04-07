@@ -77,7 +77,7 @@ Task("Publish-TeamCity-Test-Coverage")
     .Does(() => {
         TeamCity.ImportDotCoverCoverage(
             MakeAbsolute(coverageResultsFile),
-            "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%"
+            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
         );     
     }); 
 

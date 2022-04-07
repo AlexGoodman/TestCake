@@ -34,7 +34,7 @@ Task("Test")
     .Does(() => {                                              
         EnsureDirectoryExists(testCoverageResultsDirectory);                                      
 
-        var testSettings = new DotNetCoreTestSettings() {            
+        var testSettings = new DotNetTestSettings() {            
             NoRestore = true,
             Configuration = configuration,
             NoBuild = true,
@@ -47,7 +47,7 @@ Task("Test")
                         
         foreach(var project in GetFiles("**/Tests.csproj")) {            
             DotCoverCover(testRunner => 
-                testRunner.DotNetCoreTest(project.FullPath, testSettings),                
+                testRunner.DotNetTest(project.FullPath, testSettings),                
                 coverageResultsFile,
                 coverageSettings
             );
@@ -78,7 +78,8 @@ Task("Publish-TeamCity-Test-Coverage")
         TeamCity.ImportDotCoverCoverage(MakeAbsolute(coverageResultsFile));     
     }); 
 
-Task("Publish")    
+Task("Publish") 
+    .IsDependentOn("Test")   
     .Does(() => {
         DotNetPublish(solutionFolder, new DotNetPublishSettings {
             NoRestore = true,

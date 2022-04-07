@@ -157,11 +157,11 @@ Task("Publish-TeamCity-Test-Results")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
     .IsDependentOn("Test")
     .Does(() => {
-    var testResults = GetFiles(testResultFolder + "/*.trx");
+    // var testResults = GetFiles(testResultFolder + "/*.trx");
 
-    foreach (var result in testResults) {
-        TeamCity.ImportData("vstest", result);
-    }
+    // foreach (var result in testResults) {
+    //     TeamCity.ImportData("vstest", result);
+    // }
 });    
 
 Task("Publish")

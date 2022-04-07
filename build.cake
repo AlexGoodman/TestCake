@@ -1,4 +1,4 @@
-﻿#tool nuget:?package=JetBrains.dotCover.CommandLineTools
+﻿#tool nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.4"
 
 var target = Argument("target", "Start-Task");
 var configuration = Argument("configuration", "Release");
@@ -77,7 +77,7 @@ Task("Publish-TeamCity-Test-Coverage")
     .Does(() => {
         TeamCity.ImportDotCoverCoverage(
             MakeAbsolute(coverageResultsFile),
-            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
+            MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools.2021.3.4/tools"))
         );     
     }); 
 

@@ -111,7 +111,8 @@ Task("Test")
         EnsureDirectoryExists(testCoverageResultsDirectory);
         var projects = GetFiles("**/Tests.csproj");
         var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
-        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.xml");
+        var coverageReportFile = new FilePath($"{testCoverageResultsDirectory}/DotCover.html");                
+
         var testSettings = new DotNetCoreTestSettings() {
             // Configuration = "Release",
             // NoBuild = true,
@@ -126,7 +127,7 @@ Task("Test")
             // .WithFilter("-:*Tests*");
         
         var coverageReportSettings = new DotCoverReportSettings {
-            ReportType = DotCoverReportType.XML
+            ReportType = DotCoverReportType.HTML
         };
         
         foreach(var project in projects) {
@@ -137,13 +138,19 @@ Task("Test")
                 coverageSettings
             );
         }
-        // Information("Test - 2");
+        Information("Test - 2");
         // DotCoverReport(coverageResultsFile, coverageReportFile, coverageReportSettings);
-        // TeamCity.ImportData("nunit", parameters.Paths.TestResult);
-        // TeamCity.ImportDotCoverCoverage(
-        //     MakeAbsolute(coverageResultsFile),
-        //     MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
-        // );            
+        
+        var testResultFiles = GetFiles("**/test_result/*.trx");
+        foreach(var testResultFile in testResultFiles) {
+            Information(testResultFile.ToString());
+            TeamCity.ImportData("nunit", testResultFile);            
+        }
+        
+        TeamCity.ImportDotCoverCoverage(
+            MakeAbsolute(coverageResultsFile)
+            // ,MakeAbsolute(Directory("./tools/JetBrains.dotCover.CommandLineTools/tools"))
+        );            
     });
 
 Task("Publish-TeamCity-Test-Results")

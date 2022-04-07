@@ -40,7 +40,7 @@ object Build : BuildType({
 
     steps {
         script {
-            name = "dotnet tool restore"
+            name = "Tool Restore"
             scriptContent = "dotnet tool restore"
         }
         script {

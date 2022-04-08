@@ -1,4 +1,7 @@
-﻿#tool nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.4"
+﻿#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
+#tool nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.4"
+
+#addin "nuget:?package=Cake.Sonar"
 
 var target = Argument("target", "Start-Task");
 var configuration = Argument("configuration", "Release");
@@ -19,9 +22,20 @@ Task("Restore")
         DotNetRestore(solutionFolder);
     });
 
+Task("Initialise-Sonar")    
+    .Does(() => {
+        SonarBegin(new SonarBeginSettings{
+            Name = "TestCake",
+            Key = "TestCake_key",
+            Url = "http://localhost:9000",
+            Login = "admin", 
+            Password = "password",    
+        });
+    });
+
 Task("Build")
     .IsDependentOn("Restore")
-    .IsDependentOn("Clean")
+    .IsDependentOn("Clean")    
     .Does(() => {
         DotNetBuild(solutionFolder, new DotNetBuildSettings {
             NoRestore = true,
@@ -53,13 +67,23 @@ Task("Test")
             );
         }        
         
-        // DotCoverReport(
-        //     coverageResultsFile, 
-        //     new FilePath($"{testCoverageResultsDirectory}/DotCover.html"), 
-        //     new DotCoverReportSettings {
-        //         ReportType = DotCoverReportType.HTML
-        //     }
-        // );                                   
+        DotCoverReport(
+            coverageResultsFile, 
+            new FilePath($"{testCoverageResultsDirectory}/DotCover.html"), 
+            new DotCoverReportSettings {
+                ReportType = DotCoverReportType.HTML
+            }
+        );                                   
+    });
+
+Task("Sonar-Analyse")
+    .IsDependentOn("Initialise-Sonar")
+    .IsDependentOn("Build")
+    .Does(() => { 
+        SonarEnd(new SonarEndSettings{
+            Login = "admin",
+            Password = "password"
+        }); 
     });
 
 Task("Publish-TeamCity-Test-Results")
@@ -102,9 +126,11 @@ Task("Publish-TeamCity-Artifacts")
 
 Task("Start-Task")   
     .IsDependentOn("Clean")     
-    .IsDependentOn("Restore")     
+    .IsDependentOn("Restore")
+    .IsDependentOn("Initialise-Sonar")     
     .IsDependentOn("Build")     
-    .IsDependentOn("Test")     
+    .IsDependentOn("Test")              
+    .IsDependentOn("Sonar-Analyse")     
     .IsDependentOn("Publish-TeamCity-Test-Results")     
     .IsDependentOn("Publish-TeamCity-Test-Coverage")     
     .IsDependentOn("Publish")     

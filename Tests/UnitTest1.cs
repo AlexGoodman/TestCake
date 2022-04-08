@@ -15,7 +15,7 @@ namespace Tests
         public async Task Test1()
         {
             var controller = new TestController();
-            Assert.AreEqual(await controller.Test1(), 1);
+            Assert.AreEqual(1, await controller.Test1());
         }
 
         [Test]

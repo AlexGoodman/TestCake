@@ -9,7 +9,10 @@ var solutionFolder = "./";
 var outputFolder = "./artifacts";
 var testResultFolder = "./test_result";
 var testCoverageResultsDirectory = $"{MakeAbsolute(Directory(testResultFolder))}/TestCoverage";
-var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr"); 
+var testCoverageResultsPath = $"{testCoverageResultsDirectory}/DotCover.html";
+var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
+var sonarLogin = "admin"; // it should not be under vcs :)
+var sonarPassword = "password";  // it should not be under vcs :)
 
 Task("Clean")
     .Does(() => {
@@ -28,8 +31,9 @@ Task("Initialise-Sonar")
             Name = "TestCake",
             Key = "TestCake_key",
             Url = "http://localhost:9000",
-            Login = "admin", 
-            Password = "password",    
+            DotCoverReportsPath = testCoverageResultsPath,
+            Login = sonarLogin, 
+            Password = sonarPassword,    
         });
     });
 
@@ -69,7 +73,7 @@ Task("Test")
         
         DotCoverReport(
             coverageResultsFile, 
-            new FilePath($"{testCoverageResultsDirectory}/DotCover.html"), 
+            new FilePath(testCoverageResultsPath), 
             new DotCoverReportSettings {
                 ReportType = DotCoverReportType.HTML
             }
@@ -81,8 +85,8 @@ Task("Sonar-Analyse")
     .IsDependentOn("Build")
     .Does(() => { 
         SonarEnd(new SonarEndSettings{
-            Login = "admin",
-            Password = "password"
+            Login = sonarLogin, 
+            Password = sonarPassword,
         }); 
     });
 

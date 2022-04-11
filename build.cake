@@ -1,5 +1,7 @@
-﻿#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
-#tool nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.4"
+﻿#load "build/console_logger.cake"
+
+#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
+#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.4"
 
 #addin "nuget:?package=Cake.Sonar"
 
@@ -119,6 +121,7 @@ Task("Publish")
             NoBuild = true,
             OutputDirectory = outputFolder
         });
+        ConsoleMessage("Hello world!");
     });
 
 Task("Publish-TeamCity-Artifacts")
@@ -126,7 +129,7 @@ Task("Publish-TeamCity-Artifacts")
     .IsDependentOn("Publish")
     .Does(() => {
         TeamCity.PublishArtifacts(outputFolder);
-    });  
+    });    
 
 Task("Start-Task")   
     .IsDependentOn("Clean")     

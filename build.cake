@@ -13,21 +13,22 @@ var testResultFolder = "./test_result";
 var testCoverageResultsDirectory = $"{MakeAbsolute(Directory(testResultFolder))}/TestCoverage";
 var testCoverageResultsPath = $"{testCoverageResultsDirectory}/DotCover.html";
 var coverageResultsFile = new FilePath($"{testCoverageResultsDirectory}/Results.dcvr");
-var sonarLogin = "admin"; // it should not be under vcs :)
-var sonarPassword = "password";  // it should not be under vcs :)
+var sonarLogin = EnvironmentVariable("SONAR_LOGIN", "admin");
+var sonarPassword = EnvironmentVariable("SONAR_PASSWORD", "password");
 
-Task("Clean")
-    .Does(() => {
+
+var cleanTask = Task("Clean")
+    .Does(() => {        
         CleanDirectory(outputFolder);
         CleanDirectory(testResultFolder);
     });
 
-Task("Restore")
+var restoreTask = Task("Restore")
     .Does(() => {
         DotNetRestore(solutionFolder);
     });
 
-Task("Initialise-Sonar")    
+var initializeSonarTask = Task("Initialize-Sonar")    
     .Does(() => {
         SonarBegin(new SonarBeginSettings{
             Name = "TestCake",
@@ -39,9 +40,9 @@ Task("Initialise-Sonar")
         });
     });
 
-Task("Build")
-    .IsDependentOn("Restore")
-    .IsDependentOn("Clean")    
+var buildTask = Task("Build")
+    .IsDependentOn(restoreTask)
+    .IsDependentOn(cleanTask)    
     .Does(() => {
         DotNetBuild(solutionFolder, new DotNetBuildSettings {
             NoRestore = true,
@@ -49,8 +50,8 @@ Task("Build")
         });
     });
 
-Task("Test")
-    .IsDependentOn("Build")
+var testTask = Task("Test")
+    .IsDependentOn(buildTask)
     .Does(() => {                                              
         EnsureDirectoryExists(testCoverageResultsDirectory);                                      
 
@@ -82,9 +83,9 @@ Task("Test")
         );                                   
     });
 
-Task("Sonar-Analyse")
-    .IsDependentOn("Initialise-Sonar")
-    .IsDependentOn("Build")
+var sonarAnalyseTask = Task("Sonar-Analyse")
+    .IsDependentOn(initializeSonarTask)
+    .IsDependentOn(buildTask)
     .Does(() => { 
         SonarEnd(new SonarEndSettings{
             Login = sonarLogin, 
@@ -92,18 +93,18 @@ Task("Sonar-Analyse")
         }); 
     });
 
-Task("Publish-TeamCity-Test-Results")
+var publishTeamCityTestResultsTask = Task("Publish-TeamCity-Test-Results")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
-    .IsDependentOn("Test")
+    .IsDependentOn(testTask)
     .Does(() => {
         foreach (var result in GetFiles($"{testResultFolder}/*.trx")) {
             TeamCity.ImportData("vstest", result);
         }
     });
 
-Task("Publish-TeamCity-Test-Coverage")
+var publishTeamCityTestCoverageTask = Task("Publish-TeamCity-Test-Coverage")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
-    .IsDependentOn("Test")
+    .IsDependentOn(testTask)
     .Does(() => {
         TeamCity.ImportDotCoverCoverage(
             MakeAbsolute(coverageResultsFile)
@@ -112,8 +113,8 @@ Task("Publish-TeamCity-Test-Coverage")
         );     
     }); 
 
-Task("Publish") 
-    .IsDependentOn("Test")   
+var publishTask = Task("Publish") 
+    .IsDependentOn(testTask)   
     .Does(() => {
         DotNetPublish(solutionFolder, new DotNetPublishSettings {
             NoRestore = true,
@@ -124,23 +125,23 @@ Task("Publish")
         ConsoleMessage("Hello world!");
     });
 
-Task("Publish-TeamCity-Artifacts")
+var publishTeamCityArtifactsTask = Task("Publish-TeamCity-Artifacts")
     .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
-    .IsDependentOn("Publish")
+    .IsDependentOn(publishTask)
     .Does(() => {
         TeamCity.PublishArtifacts(outputFolder);
     });    
 
-Task("Start-Task")   
-    .IsDependentOn("Clean")     
-    .IsDependentOn("Restore")
-    .IsDependentOn("Initialise-Sonar")     
-    .IsDependentOn("Build")     
-    .IsDependentOn("Test")              
-    .IsDependentOn("Sonar-Analyse")     
-    .IsDependentOn("Publish-TeamCity-Test-Results")     
-    .IsDependentOn("Publish-TeamCity-Test-Coverage")     
-    .IsDependentOn("Publish")     
-    .IsDependentOn("Publish-TeamCity-Artifacts");     
+Task("Start-Task")       
+    .IsDependentOn(cleanTask)     
+    .IsDependentOn(restoreTask)
+    .IsDependentOn(initializeSonarTask)     
+    .IsDependentOn(buildTask)     
+    .IsDependentOn(testTask)              
+    .IsDependentOn(sonarAnalyseTask)     
+    .IsDependentOn(publishTeamCityTestResultsTask)     
+    .IsDependentOn(publishTeamCityTestCoverageTask)     
+    .IsDependentOn(publishTask)     
+    .IsDependentOn(publishTeamCityArtifactsTask);     
 
 RunTarget(target);

@@ -33,7 +33,8 @@ var initializeSonarTask = Task("Initialize-Sonar")
         SonarBegin(new SonarBeginSettings{
             Name = "TestCake",
             Key = "TestCake_key",
-            Url = "http://localhost:9000",
+            // Url = "http://localhost:9000",
+            Url = "http://host.docker.internal:9000",
             DotCoverReportsPath = testCoverageResultsPath,
             Login = sonarLogin, 
             Password = sonarPassword,    

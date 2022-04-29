@@ -1,7 +1,7 @@
 ﻿#load "build/console_logger.cake"
 
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
-#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2021.3.2"
+#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2022.1.1"
 
 #addin "nuget:?package=Cake.Sonar"
 
